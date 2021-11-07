@@ -1,12 +1,43 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class QuikPass {
 
     public static void main(String[] args) {
-        System.out.println(generate(8));
+
+        int length = setLength();
+
+        clearScreen();
+        System.out.println(generatePass(length));
     }
 
-    private static char[] generate(int length) {
+    private static int setLength() {
+        String askLength = "Password Length: ";
+        String warnLength = "Invalid password length. Please enter a valid two-digit number.";
+
+        Scanner lengthInq = new Scanner(System.in);
+        int length;
+
+        // Validate length input
+        do {
+            System.out.println((char)27 + "[37m" + askLength);
+            while (!lengthInq.hasNextInt()) {
+                System.out.println((char)27 + "[31m" + warnLength);
+                System.out.println((char)27 + "[37m" + askLength);
+                lengthInq.next(); // this is important!
+            }
+            length = lengthInq.nextInt();
+
+            if (length <= 0) {
+                System.out.println((char)27 + "[31m" + warnLength);
+            }
+        } while (length <= 0);
+        
+        lengthInq.close();
+        return length;
+    }
+
+    private static char[] generatePass(int length) {
 
         String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -27,7 +58,11 @@ public class QuikPass {
             password[i] = allTypesConcat.charAt(rand.nextInt(allTypesConcat.length()));
         }
         return password;
-    
+    }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
     }
     
 }
