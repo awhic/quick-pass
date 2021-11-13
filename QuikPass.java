@@ -17,12 +17,14 @@ public class QuikPass {
             Thread.sleep(3250L);
         }
         
+        // Ensure output is white text and clear the screen prior to password result
+        System.out.println((char)27 + "[37m");
         clearScreen();
         Thread.sleep(500L);
-        String output = generatePass(length, specialChars).toString();
 
         System.out.println("");
-        System.out.println((char)27 + "[37m" + output);
+        System.out.println(generatePass(length, specialChars));
+        System.out.println("");
     }
 
     private static int setLength() {
@@ -43,10 +45,10 @@ public class QuikPass {
             }
             length = lengthInq.nextInt();
 
-            if (length <= 0 && length > 100) {
+            if (length <= 0 || length > 99) {
                 System.out.println((char)27 + "[31m" + warnLength);
             }
-        } while (length <= 0 && length >= 100);
+        } while (length <= 0 || length > 99);
 
         return length;
     }
@@ -65,9 +67,10 @@ public class QuikPass {
         } else if (specCharValue.equals("N") || specCharValue.equals("n")) {
             specChar = "";
         } else {
-            specChar = "";
+            specCharInq.close();
             throw new Exception("Invalid Input");
         }
+        specCharInq.close();
         return specChar;
     }
 
