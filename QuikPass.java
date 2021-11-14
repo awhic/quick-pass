@@ -1,6 +1,10 @@
 import java.util.Random;
 import java.util.Scanner;
 
+import java.awt.datatransfer.StringSelection;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+
 public class QuikPass {
 
     public static void main(String[] args) throws Exception {
@@ -23,8 +27,16 @@ public class QuikPass {
         Thread.sleep(500L);
 
         System.out.println("");
-        System.out.println(generatePass(length, specialChars));
+        final char[] output = generatePass(length, specialChars);
+        System.out.println(output);
         System.out.println("");
+        Thread.sleep(500L);
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(
+                new StringSelection(String.valueOf(output)), null
+            );
+        System.out.println("New password copied to the Clipboard!");
     }
 
     private static int setLength() {
