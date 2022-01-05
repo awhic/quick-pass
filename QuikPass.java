@@ -7,8 +7,15 @@ import java.awt.datatransfer.Clipboard;
 
 public class QuikPass {
 
-    public static void main(String[] args) throws Exception {
+    public String grabPassword() throws InterruptedException {
+        return generatorValueOnly().toString();
+    }
 
+    public static void main(String[] args) throws Exception {
+        generator();
+    }
+
+    private static char[] generator() throws InterruptedException {
         int length = setLength();
         String specialChars;
 
@@ -37,6 +44,28 @@ public class QuikPass {
                 new StringSelection(String.valueOf(output)), null
             );
         System.out.println("New password copied to the Clipboard!");
+
+        return output;
+    }
+
+    private static char[] generatorValueOnly() {
+        int length = setLength();
+        String specialChars;
+
+        try {
+            specialChars = setSpecChar();
+        } catch (Exception e) {
+            specialChars = "!@#$%^&*.";
+        }
+        
+        final char[] output = generatePass(length, specialChars);
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(
+                new StringSelection(String.valueOf(output)), null
+            );
+
+        return output;
     }
 
     private static int setLength() {
